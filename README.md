@@ -80,7 +80,7 @@ example
       }
       render(){
         return (
-              <Tip onMounted={this.onMounted.bind(this)}>
+              <Tip onMounted={this.tipMounted.bind(this)}>
                 <TipContent 
                 key="tipContent" //the key props is important, you cannot remove that~
                 degree={60}
@@ -127,5 +127,6 @@ example
     }
   }
 ```
+
 5. you can pass `style` and className to either `Tip`,`TipContent` or `TipShowTrigger` component;   
   
