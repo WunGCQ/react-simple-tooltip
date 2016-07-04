@@ -3,7 +3,7 @@ a simple simple tooltip based on react.
 
 example
 
-```
+```javascript
 <Tip toggle={this.clickToggle.bind(this)} onMounted={this.showTip.bind(this)}>
           <TipContent
             style={{width:200,height:200,border:'2px solid #000',}}
@@ -35,7 +35,8 @@ example
   this component shall use Tip, TipContent, TipShowTrigger together. You can see the structure in the example above.
   
   your code will mostly looks like this:
-  ```
+  
+  ```javascript
     <Tip>
       <TipContent key="tipContent"> //the key props is important, you cannot remove that~
         <Your-Tip/> 
@@ -47,6 +48,7 @@ example
       </TipShowTrigger>
     </Tip>  
   ```
+  
   this component toggles when user hover the TipContent and TipShowTrigger.
   
   
@@ -56,7 +58,7 @@ example
   3. you can get the show/hide function by pass props `getShowFunction` and `getHideFunction`, the hide/show function will be passed as callback in your function.example:
   
   your TipContent component:
-  ```
+  ``` javascript
   (<TipContent
             style={{width:200,height:200,border:'2px solid #000',}}
             key="tipContent"
@@ -67,7 +69,7 @@ example
           
   ```
   your outer code:
-  ```
+  ``` javascript
     class controller extends React.Component {
       constructor(props){
         super(props);
