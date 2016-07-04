@@ -1,0 +1,1 @@
+export Tip, { TipContent, TipShowTrigger } from './tooltip';
