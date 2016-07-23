@@ -1,20 +1,20 @@
 // out sie common data
-import React from 'react';
+import React , { Component }from 'react';
 
-export default class TipContent extends React.Component {
+export default class TipContent extends Component {
 
   constructor(props) {
     super(props);
-
     this.state = {};
     this.state.style = {
       display: 'block',
       position: 'fixed',
-      overflow: 'hidden',
+      // overflow: 'hidden', //fuck , 当初为什么脑子抽写了这么一破属性
       transform: 'translateY(10px)',
       opacity: 0,
       transition: 'transform ease .264s .1s, opacity ease 0.4s',
     };
+    this.toggle = this.toggle.bind(this);
 
     this.hasComputtedOffset = false;
     this.size = {
@@ -76,16 +76,16 @@ export default class TipContent extends React.Component {
     var o = {x: SIN * R, y: -COS * R};
     var rectSIN = 0.5 * size.width / R;
     var recctCOS = 0.5 * size.height / R;
-    console.log(rectSIN);
+    // console.log(rectSIN);
     var whiteOffsetY = 0, whiteOffsetX = 0;
     if (rectSIN > Math.abs(SIN)) { //上方下方
       whiteOffsetY = Math.abs(COS) * R - size.height / 2 - p.height / 2 - 20;
       whiteOffsetX = whiteOffsetY * TAN;
-      console.log('上下')
+      // console.log('上下')
     } else {
       whiteOffsetX = Math.abs(SIN) * R - size.width / 2 - p.width / 2 - 20;
       whiteOffsetY = whiteOffsetX / TAN;
-      console.log('左右');
+      // console.log('左右');
     }
     if (SIN <= 0) {
       whiteOffsetX = 0 - whiteOffsetX;
@@ -94,7 +94,7 @@ export default class TipContent extends React.Component {
       whiteOffsetY = 0 - whiteOffsetY;
     }
 
-    console.log(`whiteOffsetX ${whiteOffsetX} whiteOffsetY ${whiteOffsetY}`);
+    // console.log(`whiteOffsetX ${whiteOffsetX} whiteOffsetY ${whiteOffsetY}`);
 
     this.offset = {
       x: o.x - size.width / 2 - whiteOffsetX,
@@ -125,9 +125,31 @@ export default class TipContent extends React.Component {
       height = props.style.height || c.offsetHeight;
     }
     else {
-      width = c.offsetWidth;
-      height = c.offsetHeight;
+
+      var display = c._css('display');
+      var visibility = c._css('hidden');
+      c.style.display = 'block';
+      c.style.visibility = 'hidden';
+      var c_shadow = c.cloneNode(true);
+      var c_shadowWrapper = document.createElement('div');
+      c_shadowWrapper.style.opacity = 0;
+      c_shadowWrapper.style.position = 'fixed';
+      c_shadowWrapper.appendChild(c_shadow);
+      document.body.appendChild(c_shadowWrapper);
+
+      width = c_shadow.offsetWidth;
+      height = c_shadow.offsetHeight;
+
+      document.body.removeChild(c_shadowWrapper);
+
+      c.style.display = display;
+      c.style.visibility = visibility;
+      //
+      // document.removeChild(c_shadowWrapper);
     }
+
+
+
 
     this.setStyle({
       display: 'none',

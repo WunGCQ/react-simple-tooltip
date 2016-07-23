@@ -2,7 +2,6 @@ Node.prototype._css = function (attr, value) {
   if (value != null && typeof value != "undefined") {
     if (typeof value != "")
       this.style[attr] = value;
-
     return this;//返回本对象，方便链式调用~
   }
   else {
@@ -25,9 +24,6 @@ Node.prototype._css = function (attr, value) {
   }
 };
 
-export TipContent from './tip';
-export TipShowTrigger from './tipShowTrigger';
-
 //to check if the tip trigger is visible
 const visibleY = function (el) {
   var rect = el.getBoundingClientRect(), top = rect.top, height = rect.height,
@@ -49,7 +45,10 @@ const getScrollParent = function (el) {
 
   while (node != document.childNodes[0]) {
     //  console.log(`${node.parentNode.scrollHeight} ?? ${node.parentNode.offsetHeight}`);
-    if (node.parentNode.scrollHeight != node.parentNode.offsetHeight) {
+    if(!node || !node.parentNode) {
+      break;
+    }
+    if (node && node.parentNode && node.parentNode.scrollHeight && node.parentNode.scrollHeight != node.parentNode.offsetHeight) {
       res.push(node.parentNode);
     }
     node = node.parentNode;
@@ -58,8 +57,12 @@ const getScrollParent = function (el) {
 };
 
 
+import React , {Component }from 'react';
+import TipContent from './tip';
+import TipShowTrigger from './tipShowTrigger';
+export {TipContent, TipShowTrigger};
 
-export default class Tip extends React.Component {
+export default class Tip extends Component {
   constructor(props) {
     var degree = 0;
     React.Children.forEach(props.children, (child)=> {
@@ -109,7 +112,7 @@ export default class Tip extends React.Component {
   }
 
   checkTipVisible() {
-    console.log(visibleY(this.refs.tipContainer));
+    // console.log(visibleY(this.refs.tipContainer));
   }
 
   bindWindowResize() {
@@ -208,7 +211,7 @@ export default class Tip extends React.Component {
     if (this.props.toggle) {
       userAllow = this.props.toggle(nowState, type);
     }
-    console.log(userAllow);
+    // console.log(userAllow);
     if (userAllow) {
       this.setState(Object.assign(nowState, {show: res}));
       this.toggleFunction && this.toggleFunction(res, nowState);
@@ -224,12 +227,12 @@ export default class Tip extends React.Component {
     return React.Children.map(this.props.children,
       (child) => {
         if (child.key == 'tipContent') {
-
           return React.cloneElement(child, {
             adjust: this.adjust.bind(this),
             tipStyle: this.state.tipStyle,
             degree: child.props.degree || 'auto',
             setMounted: this.setMounted.bind(this, 'tip'),
+            ref: 'tipContent',
             setTipContentHover: this.setTipContentHover.bind(this),
             setToggleFunction: this.setToggleFunction.bind(this),
             getTipTriggerPoistion: this.tipTriggerPosition.bind(this),
@@ -239,6 +242,7 @@ export default class Tip extends React.Component {
           return React.cloneElement(child, {
             trigger: this.trigger.bind(this),
             setClick: this.setClick.bind(this),
+            ref:'tipShowTrigger',
             setMounted: this.setMounted.bind(this, 'trigger'),
             getTipTriggerPoistion: this.getTipTriggerPoistion.bind(this),
             setTipTriggerHover: this.setTipTriggerHover.bind(this),
